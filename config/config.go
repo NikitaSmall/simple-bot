@@ -10,6 +10,9 @@ var conf struct {
 		Token string `envconfig:"default=150776353:AAH5JLFPP6-Qp0HBGXWFr5NOunyjcBDpxfA"`
 		Mode  string `envconfig:"default=debug"`
 	}
+	Quote struct {
+		Source string `envconfig:"default=http://bash.im/random"`
+	}
 }
 
 // initialized env configs
@@ -23,7 +26,8 @@ func initializeConfig() map[string]string {
 	}
 
 	return map[string]string{
-		"botToken": conf.Bot.Token,
-		"botMode":  conf.Bot.Mode,
+		"botToken":    conf.Bot.Token,
+		"botMode":     conf.Bot.Mode,
+		"quoteSource": conf.Quote.Source,
 	}
 }
