@@ -1,6 +1,7 @@
-package main
+package bot
 
 import (
+	"github.com/nikitasmall/simple-bot/config"
 	"gopkg.in/telegram-bot-api.v1"
 	"log"
 )
@@ -20,12 +21,12 @@ func CreateBot() *Bot {
 }
 
 func newApiBot() *tgbotapi.BotAPI {
-	bot, err := tgbotapi.NewBotAPI(Env["botToken"])
+	bot, err := tgbotapi.NewBotAPI(config.Env["botToken"])
 	if err != nil {
 		log.Panic("Error on bot initializing! ", err.Error())
 	}
 
-	if Env["botMode"] == "debug" {
+	if config.Env["botMode"] == "debug" {
 		bot.Debug = true
 		log.Printf("Bot runned in debug mode.")
 	}

@@ -1,6 +1,10 @@
 package main
 
+import (
+	"github.com/nikitasmall/simple-bot/bot"
+)
+
 func main() {
-	bot := CreateBot()
+	bot := bot.CreateBot()
 	bot.ServeUpdates()
 }
