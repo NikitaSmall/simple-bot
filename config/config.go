@@ -13,6 +13,11 @@ var conf struct {
 	Quote struct {
 		Source string `envconfig:"default=http://bash.im/random"`
 	}
+	Weather struct {
+		Api struct {
+			Key string `envconfig:"default=ec071e1bd39ffdef16d016806d38c8c1"`
+		}
+	}
 }
 
 // initialized env configs
@@ -26,8 +31,9 @@ func initializeConfig() map[string]string {
 	}
 
 	return map[string]string{
-		"botToken":    conf.Bot.Token,
-		"botMode":     conf.Bot.Mode,
-		"quoteSource": conf.Quote.Source,
+		"botToken":      conf.Bot.Token,
+		"botMode":       conf.Bot.Mode,
+		"quoteSource":   conf.Quote.Source,
+		"weatherApiKey": conf.Weather.Api.Key,
 	}
 }

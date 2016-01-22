@@ -8,30 +8,30 @@ import (
 	"net/http"
 )
 
-func getPageResult(url string, query string) string {
-	page := getPage(url)
+func (q Quoter) getPageResult() string {
+	page := q.getPage()
 
 	doc, err := goquery.NewDocumentFromReader(page)
 	if err != nil {
 		log.Print(err.Error())
 	}
 
-	result := doc.Find(query).First()
+	result := doc.Find(q.query).First()
 	result.Find("br").Each(func(i int, s *goquery.Selection) {
 		s.ReplaceWithHtml("\n")
 	})
 	return result.Text()
 }
 
-func getPage(url string) io.Reader {
-	resp, err := http.Get(url)
+func (q Quoter) getPage() io.Reader {
+	resp, err := http.Get(q.url)
 	if err != nil {
-		log.Printf("Can't get the page %s with error: %s", url, err.Error())
+		log.Printf("Can't get the page %s with error: %s", q.url, err.Error())
 	}
 
-	page, err := iconv.NewReader(resp.Body, "windows-1251", "utf-8")
+	page, err := iconv.NewReader(resp.Body, q.fromEncoding, "utf-8")
 	if err != nil {
-		log.Print("Can't read the page %s with error: %s", url, err.Error())
+		log.Print("Can't read the page %s with error: %s", q.url, err.Error())
 	}
 
 	return page
