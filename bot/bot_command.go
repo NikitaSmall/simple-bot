@@ -3,48 +3,43 @@ package bot
 import (
 	"github.com/nikitasmall/simple-bot/quoter"
 	"gopkg.in/telegram-bot-api.v1"
-	"regexp"
 )
 
-var commandRegexp = regexp.MustCompile(`/\w+|\w+|"[\w ]*"`)
+type botCommand struct {
+	command string
+	args    []string
+	chatID  int
+	update  tgbotapi.Update
+}
 
-// Function runs endless loop to listen user
-// input from `bot.Updates` chan (chan of tgbotapi.Update).
-// In case of new message starts to process it and send.
-func (bot *Bot) ServeUpdates() {
-	var msg tgbotapi.Chattable
+func newBotCommand(update tgbotapi.Update) botCommand {
+	command, args := parseUserInput(update.Message.Text)
 
-	for update := range bot.Updates {
-		msg = processCommand(update)
-		bot.ApiBot.Send(msg)
+	return botCommand{
+		command: command,
+		args:    args,
+		chatID:  update.Message.Chat.ID,
+		update:  update,
 	}
 }
 
-// func processes any user's input to bot.
-// main handling function. It parses input and tries to process it.
-func processCommand(update tgbotapi.Update) tgbotapi.Chattable {
+func (bc botCommand) execute() tgbotapi.Chattable {
 	var msg tgbotapi.Chattable
-	command, args := parseUserInput(update.Message.Text)
 
-	switch command {
+	switch bc.command {
 	case "/time":
-		msg = tgbotapi.NewStickerUpload(update.Message.Chat.ID, "public/pic/at.jpg")
+		msg = tgbotapi.NewStickerUpload(bc.chatID, "public/pic/at.jpg")
 	case "/weather":
-		if len(args) != 1 {
-			msg = tgbotapi.NewMessage(update.Message.Chat.ID, "Wrong number of arguments! Should be one.")
+		if len(bc.args) != 1 {
+			msg = tgbotapi.NewMessage(bc.chatID, "Wrong number of arguments! Should be one.")
 		} else {
-			msg = tgbotapi.NewMessage(update.Message.Chat.ID, quoter.GetCurrentWeather(args[0]))
+			msg = tgbotapi.NewMessage(bc.chatID, quoter.GetCurrentWeather(bc.args[0]))
 		}
 	case "/quote":
-		msg = tgbotapi.NewMessage(update.Message.Chat.ID, quoter.GetRandomQuote())
+		msg = tgbotapi.NewMessage(bc.chatID, quoter.GetRandomQuote())
 	default:
-		msg = tgbotapi.NewMessage(update.Message.Chat.ID, "Don't understand '"+update.Message.Text+"'")
+		msg = tgbotapi.NewMessage(bc.chatID, "Don't understand '"+bc.update.Message.Text+"'")
 	}
 
 	return msg
-}
-
-func parseUserInput(input string) (string, []string) {
-	args := commandRegexp.FindAllString(input, -1)
-	return args[0], args[1:]
 }
