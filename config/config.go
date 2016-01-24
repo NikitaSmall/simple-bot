@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/vrischmann/envconfig"
 	"log"
+
+	"github.com/vrischmann/envconfig"
 )
 
 var conf struct {
@@ -18,6 +19,11 @@ var conf struct {
 			Key string `envconfig:"default=ec071e1bd39ffdef16d016806d38c8c1"`
 		}
 	}
+	Attachment struct {
+		Adventure struct {
+			Time string `envconfig:"default=public/pic"`
+		}
+	}
 }
 
 // initialized env configs
@@ -31,9 +37,10 @@ func initializeConfig() map[string]string {
 	}
 
 	return map[string]string{
-		"botToken":      conf.Bot.Token,
-		"botMode":       conf.Bot.Mode,
-		"quoteSource":   conf.Quote.Source,
-		"weatherApiKey": conf.Weather.Api.Key,
+		"botToken":                conf.Bot.Token,
+		"botMode":                 conf.Bot.Mode,
+		"quoteSource":             conf.Quote.Source,
+		"weatherApiKey":           conf.Weather.Api.Key,
+		"attachmentAdventureTime": conf.Attachment.Adventure.Time,
 	}
 }

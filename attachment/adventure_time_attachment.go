@@ -1,11 +1,14 @@
 package attachment
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/nikitasmall/simple-bot/config"
 )
 
 // struct that represents stickers storage
@@ -17,31 +20,41 @@ type AdventureTimeAttachment struct {
 }
 
 // storage
-var AdventureTimeStickers = newAdventureTimeAttachment("public/pic")
+var AdventureTimeStickers *AdventureTimeAttachment
 
 // initializing
-func newAdventureTimeAttachment(basePath string) AdventureTimeAttachment {
+func newAdventureTimeAttachment(basePath string) (*AdventureTimeAttachment, error) {
 	path := basePath + "/adventure_time"
 
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		log.Panic("Can't read adventure folder with error: " + err.Error())
+		log.Printf("Can't read adventure folder with error: %s" + err.Error())
+		return nil, errors.New("Can't read adventure folder with error: " + err.Error())
 	}
 
 	if len(files) == 0 {
-		log.Panic("Adventure folder is empty!")
+		log.Print("Adventure folder is empty!")
+		return nil, errors.New("Stickers folder is empty!")
 	}
 
-	return AdventureTimeAttachment{
+	return &AdventureTimeAttachment{
 		path:          path,
 		stickersCount: len(files),
-	}
+	}, nil
 }
 
 // function returns a path to upload random adventure time sticker
-func (at AdventureTimeAttachment) GetAttachmentPath() string {
+func (at *AdventureTimeAttachment) GetAttachmentPath() string {
+	if at == nil {
+		var err error
+		at, err = newAdventureTimeAttachment(config.Env["attachmentAdventureTime"])
+		if err != nil {
+			return "Adventure time! Sorry, no stickers for today!"
+		}
+	}
+
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	stickerNumber := r.Int31n(int32(at.stickersCount))
+	stickerNumber := r.Intn(at.stickersCount)
 
 	return fmt.Sprintf("%s/%d.jpg", at.path, stickerNumber)
 }
