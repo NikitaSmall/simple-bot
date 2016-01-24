@@ -4,6 +4,8 @@ import (
 	"strings"
 )
 
+// matchers that helps to select a proper handler for certain user's input
+
 func (bc botCommand) isQuoteRequest() bool {
 	return (bc.command == "/quote") || (bc.command == "/joke")
 }

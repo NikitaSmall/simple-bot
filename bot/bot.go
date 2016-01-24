@@ -1,9 +1,10 @@
 package bot
 
 import (
+	"log"
+
 	"github.com/nikitasmall/simple-bot/config"
 	"gopkg.in/telegram-bot-api.v1"
-	"log"
 )
 
 type Bot struct {
