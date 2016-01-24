@@ -1,12 +1,8 @@
 package bot
 
 import (
-	"regexp"
-
 	"gopkg.in/telegram-bot-api.v1"
 )
-
-var commandRegexp = regexp.MustCompile(`/\w+|\w+|"[\w ]*"`)
 
 // Function runs endless loop to listen user
 // input from `bot.Updates` chan (chan of tgbotapi.Update).
@@ -25,9 +21,4 @@ func (bot *Bot) ServeUpdates() {
 func processCommand(update tgbotapi.Update) tgbotapi.Chattable {
 	botCommand := newBotCommand(update)
 	return botCommand.execute()
-}
-
-func parseUserInput(input string) (string, []string) {
-	args := commandRegexp.FindAllString(input, -1)
-	return args[0], args[1:]
 }

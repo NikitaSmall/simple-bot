@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"regexp"
+
 	"github.com/nikitasmall/simple-bot/quoter"
 	"gopkg.in/telegram-bot-api.v1"
 )
@@ -11,6 +13,8 @@ type botCommand struct {
 	chatID  int
 	update  tgbotapi.Update
 }
+
+var commandRegexp = regexp.MustCompile(`/\w+|\w+|"[\w ]*"`)
 
 func newBotCommand(update tgbotapi.Update) botCommand {
 	command, args := parseUserInput(update.Message.Text)
@@ -42,4 +46,9 @@ func (bc botCommand) execute() tgbotapi.Chattable {
 	}
 
 	return msg
+}
+
+func parseUserInput(input string) (string, []string) {
+	args := commandRegexp.FindAllString(input, -1)
+	return args[0], args[1:]
 }
