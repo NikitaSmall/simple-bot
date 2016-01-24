@@ -28,13 +28,13 @@ func newAdventureTimeAttachment(basePath string) (*AdventureTimeAttachment, erro
 
 	files, err := ioutil.ReadDir(path)
 	if err != nil {
-		log.Printf("Can't read adventure folder with error: %s" + err.Error())
+		log.Printf("Can't read adventure folder with error: %s", err.Error())
 		return nil, errors.New("Can't read adventure folder with error: " + err.Error())
 	}
 
 	if len(files) == 0 {
-		log.Print("Adventure folder is empty!")
-		return nil, errors.New("Stickers folder is empty!")
+		log.Printf("Stickers folder is empty at %s!", path)
+		return nil, errors.New("Adventure folder is empty!")
 	}
 
 	return &AdventureTimeAttachment{
@@ -44,17 +44,17 @@ func newAdventureTimeAttachment(basePath string) (*AdventureTimeAttachment, erro
 }
 
 // function returns a path to upload random adventure time sticker
-func (at *AdventureTimeAttachment) GetAttachmentPath() string {
+func (at *AdventureTimeAttachment) GetAttachmentPath() (string, error) {
 	if at == nil {
 		var err error
 		at, err = newAdventureTimeAttachment(config.Env["attachmentAdventureTime"])
 		if err != nil {
-			return "Adventure time! Sorry, no stickers for today!"
+			return "", errors.New("Adventure time! Sorry, no stickers for today!")
 		}
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	stickerNumber := r.Intn(at.stickersCount)
 
-	return fmt.Sprintf("%s/%d.jpg", at.path, stickerNumber)
+	return fmt.Sprintf("%s/%d.jpg", at.path, stickerNumber), nil
 }

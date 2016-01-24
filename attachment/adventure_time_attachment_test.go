@@ -45,7 +45,10 @@ func TestATAttachmentGetPath(t *testing.T) {
 	config.Env["attachmentAdventureTime"] = "test_pics"
 	var AtStickers *AdventureTimeAttachment
 
-	path := AtStickers.GetAttachmentPath()
+	path, err := AtStickers.GetAttachmentPath()
+	if err != nil {
+		t.Errorf("Error on path getting: %s", err.Error())
+	}
 
 	if !strings.Contains(path, "adventure_time") || !strings.Contains(path, ".jpg") {
 		t.Error(AtStickers)
@@ -57,17 +60,23 @@ func TestATAttachmentGetPathWrong(t *testing.T) {
 	var AtStickers *AdventureTimeAttachment
 	config.Env["attachmentAdventureTime"] = "test_pics/pic"
 
-	path := AtStickers.GetAttachmentPath()
+	path, err := AtStickers.GetAttachmentPath()
+	if err == nil {
+		t.Errorf("Error on path getting: %s", err.Error())
+	}
 
-	if !strings.Contains(path, "Adventure time! Sorry, no stickers for today!") {
+	if !strings.Contains(err.Error(), "Adventure time! Sorry, no stickers for today!") {
 		t.Errorf("Object was initialized. Path: %s", path)
 	}
 
 	config.Env["attachmentAdventureTime"] = "test_pics/pic2"
 
-	path = AtStickers.GetAttachmentPath()
+	path, err = AtStickers.GetAttachmentPath()
+	if err == nil {
+		t.Errorf("Error on path getting: %s", err.Error())
+	}
 
-	if !strings.Contains(path, "Adventure time! Sorry, no stickers for today!") {
+	if !strings.Contains(err.Error(), "Adventure time! Sorry, no stickers for today!") {
 		t.Errorf("Object was initialized. Path: %s", path)
 	}
 }

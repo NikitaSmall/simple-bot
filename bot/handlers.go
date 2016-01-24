@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"log"
+
 	"github.com/nikitasmall/simple-bot/attachment"
 	"github.com/nikitasmall/simple-bot/quoter"
 	"gopkg.in/telegram-bot-api.v1"
@@ -26,6 +28,10 @@ func weatherHandler(bc botCommand) tgbotapi.Chattable {
 }
 
 func adventureTimeHandler(bc botCommand) tgbotapi.Chattable {
-	return tgbotapi.NewStickerUpload(bc.chatID,
-		attachment.AdventureTimeStickers.GetAttachmentPath())
+	msg, err := attachment.AdventureTimeStickers.GetAttachmentPath()
+	if err != nil {
+		log.Printf("Error on adventure time handling: %s", err.Error())
+		return tgbotapi.NewStickerUpload(bc.chatID, err.Error())
+	}
+	return tgbotapi.NewStickerUpload(bc.chatID, msg)
 }

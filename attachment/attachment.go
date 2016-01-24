@@ -4,5 +4,5 @@ package attachment
 // that can represent any type of data
 // that could be uploaded with telegram bot api.
 type Attachment interface {
-	GetAttachmentPath() string
+	GetAttachmentPath() (string, error)
 }
