@@ -7,11 +7,13 @@ import (
 	"gopkg.in/telegram-bot-api.v1"
 )
 
+// bot struct represents API bot part and channel with updates for this bot.
 type Bot struct {
 	ApiBot  *tgbotapi.BotAPI
 	Updates <-chan tgbotapi.Update
 }
 
+// function returns new bot with initialized update channel.
 func CreateBot() *Bot {
 	bot := newApiBot()
 
@@ -21,6 +23,7 @@ func CreateBot() *Bot {
 	}
 }
 
+// function creates new API bot
 func newApiBot() *tgbotapi.BotAPI {
 	bot, err := tgbotapi.NewBotAPI(config.Env["botToken"])
 	if err != nil {
@@ -35,6 +38,7 @@ func newApiBot() *tgbotapi.BotAPI {
 	return bot
 }
 
+// function creates new update chan for provided bot
 func newUpdatesChan(bot *tgbotapi.BotAPI) <-chan tgbotapi.Update {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
