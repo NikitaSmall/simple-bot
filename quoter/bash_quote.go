@@ -12,6 +12,6 @@ var bashQuoter = Quoter{
 }
 
 // function returns the random joke from bash.im
-func GetRandomQuote() string {
+func GetRandomQuote() (string, error) {
 	return bashQuoter.getPageResult()
 }

@@ -11,7 +11,7 @@ var openWeatherQuoter = Quoter{
 	fromEncoding: "utf-8",
 }
 
-func GetCurrentWeather(city string) string {
+func GetCurrentWeather(city string) (string, error) {
 	w := openWeatherQuoter
 	w.url += city
 
