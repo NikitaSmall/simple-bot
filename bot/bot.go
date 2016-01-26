@@ -14,8 +14,8 @@ type Bot struct {
 }
 
 // function returns new bot with initialized update channel.
-func CreateBot() *Bot {
-	bot := newApiBot()
+func CreateBot(apiToken string) *Bot {
+	bot := newApiBot(apiToken)
 
 	return &Bot{
 		ApiBot:  bot,
@@ -24,8 +24,8 @@ func CreateBot() *Bot {
 }
 
 // function creates new API bot
-func newApiBot() *tgbotapi.BotAPI {
-	bot, err := tgbotapi.NewBotAPI(config.Env["botToken"])
+func newApiBot(apiToken string) *tgbotapi.BotAPI {
+	bot, err := tgbotapi.NewBotAPI(apiToken)
 	if err != nil {
 		log.Panic("Error on bot initializing! ", err.Error())
 	}
