@@ -18,3 +18,7 @@ func (bc botCommand) isAdventureTimeRequest() bool {
 	return (bc.command == "/time") ||
 		(strings.Contains(strings.ToLower(bc.fullText), "what time is it"))
 }
+
+func (bc botCommand) isMagicCardRequest() bool {
+	return (bc.command == "/magic") || (bc.command == "/m")
+}

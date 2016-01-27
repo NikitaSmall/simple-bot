@@ -43,6 +43,8 @@ func (bc botCommand) execute() tgbotapi.Chattable {
 		msg = weatherHandler(bc)
 	case bc.isAdventureTimeRequest():
 		msg = adventureTimeHandler(bc)
+	case bc.isMagicCardRequest():
+		msg = magicCardHandler(bc)
 	default:
 		msg = defaultHandler(bc)
 	}

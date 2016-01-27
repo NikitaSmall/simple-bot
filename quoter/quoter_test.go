@@ -11,7 +11,7 @@ func TestGetCorrectPage(t *testing.T) {
 		fromEncoding: "utf-8",
 	}
 
-	res, err := quoter.getPageResult()
+	res, err := quoter.GetPageResult()
 	if err != nil {
 		t.Errorf("Error on parse correct page: %s", err.Error())
 	}
@@ -28,7 +28,7 @@ func TestGetWrongPage(t *testing.T) {
 		fromEncoding: "utf-8",
 	}
 
-	res, err := quoter.getPageResult()
+	res, err := quoter.GetPageResult()
 	if err == nil {
 		t.Error("Error doesn't rise on wrong page parse!")
 	}
@@ -45,7 +45,7 @@ func TestGetWrongQuery(t *testing.T) {
 		fromEncoding: "utf-8",
 	}
 
-	res, err := quoter.getPageResult()
+	res, err := quoter.GetPageResult()
 	if err != nil {
 		t.Error("Error on parse correct page: %s", err.Error())
 	}

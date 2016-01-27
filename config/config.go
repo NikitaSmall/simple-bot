@@ -2,9 +2,12 @@ package config
 
 import (
 	"log"
+	"math/rand"
 
 	"github.com/vrischmann/envconfig"
 )
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 var conf struct {
 	Bot struct {
@@ -43,4 +46,12 @@ func initializeConfig() map[string]string {
 		"weatherApiKey":           conf.Weather.Api.Key,
 		"attachmentAdventureTime": conf.Attachment.Adventure.Time,
 	}
+}
+
+func RandStringBytes(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
 }

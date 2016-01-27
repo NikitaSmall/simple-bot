@@ -1,16 +1,17 @@
 package quoter
 
 import (
-	"github.com/PuerkitoBio/goquery"
-	"github.com/djimenez/iconv-go"
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/djimenez/iconv-go"
 )
 
 // simple interface to get some information from page in the internet
 type PageParser interface {
-	getPageResult() (string, error)
+	GetPageResult() (string, error)
 	getPage() (io.Reader, string)
 }
 
@@ -27,7 +28,7 @@ type Quoter struct {
 // function parse a result page (provided by reader) and returns first single
 // string contained in html-query (jQuery-like string).
 // Part of PageParser interface Implementation for Quoter struct.
-func (q Quoter) getPageResult() (string, error) {
+func (q Quoter) GetPageResult() (string, error) {
 	page, err := q.getPage()
 	if err != nil {
 		return "", err

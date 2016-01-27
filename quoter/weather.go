@@ -2,6 +2,7 @@ package quoter
 
 import (
 	"fmt"
+
 	"github.com/nikitasmall/simple-bot/config"
 )
 
@@ -18,5 +19,5 @@ func GetCurrentWeather(city string) (string, error) {
 	w := openWeatherQuoter
 	w.url += city
 
-	return w.getPageResult()
+	return w.GetPageResult()
 }

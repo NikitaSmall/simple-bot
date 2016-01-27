@@ -54,3 +54,26 @@ func adventureTimeHandler(bc botCommand) tgbotapi.Chattable {
 
 	return tgbotapi.NewStickerUpload(bc.chatID, msg)
 }
+
+func magicCardHandler(bc botCommand) tgbotapi.Chattable {
+	var filePath string
+	var err error
+
+	if len(bc.args) > 1 {
+		return tgbotapi.NewMessage(bc.chatID,
+			"Wrong arguments number! Should be one or none. Format: '/m random' or '/m \"card name\"'")
+	}
+
+	if (len(bc.args) == 0) || bc.args[0] == "random" {
+		filePath, err = attachment.GetRandomCard()
+	} else {
+		filePath, err = attachment.GetRandomCard() // attachment.GetCardByName(bc.args[0])
+	}
+
+	if err != nil {
+		log.Printf("Error on magic card handling: %s", err.Error())
+		return tgbotapi.NewMessage(bc.chatID, err.Error())
+	}
+
+	return tgbotapi.NewPhotoUpload(bc.chatID, filePath)
+}
