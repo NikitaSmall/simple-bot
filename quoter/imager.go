@@ -5,57 +5,46 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/djimenez/iconv-go"
-	"github.com/nikitasmall/simple-bot/config"
 )
 
 // Imager is a struct to get specific image from the page.
 // Implements a PageParser interface and returns single string as a path to image which
 // could be found at the url via query string. fromEncoding should be a string
-// that represents page original encoding.
+// that represents page original encoding. imageIndex is a number of image at the page.
 type Imager struct {
 	url          string
 	query        string
 	fromEncoding string
+	imageIndex   int
 }
 
-func NewImager(url, query, fromEnc string) Imager {
+// returns new imager instance.
+func NewImager(url, query, fromEnc string, imageIndex int) Imager {
 	return Imager{
 		url:          url,
 		query:        query,
 		fromEncoding: fromEnc,
+		imageIndex:   imageIndex,
 	}
 }
 
-func (a Imager) SavePicture() (string, error) {
+// function uploads a picture from provided by imager page and query
+// and returns (opened!) resp.Body that implements ReadCloser interface.
+func (a Imager) UploadPicture() (io.ReadCloser, error) {
 	imageUrl, err := a.GetPageResult()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	resp, err := http.Get(imageUrl)
-	defer resp.Body.Close()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	imagePath := "public/pic/" + config.RandStringBytes(32) + ".jpg"
-	file, err := os.Create(imagePath)
-	defer file.Close()
-	if err != nil {
-		return "", err
-	}
-
-	_, err = io.Copy(file, resp.Body)
-
-	if err != nil {
-		return "", err
-	}
-
-	return imagePath, nil
+	return resp.Body, nil
 }
 
 // function parse a result page (provided by reader) and returns an
@@ -73,7 +62,7 @@ func (a Imager) GetPageResult() (string, error) {
 		return "", err
 	}
 
-	result := doc.Find(a.query).First()
+	result := doc.Find(a.query).Eq(a.imageIndex)
 	attr, ok := result.Attr("src")
 	if !ok {
 		log.Printf("Can't get image src from element '%s' in url %s", a.query, a.url)

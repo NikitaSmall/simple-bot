@@ -65,9 +65,9 @@ func magicCardHandler(bc botCommand) tgbotapi.Chattable {
 	}
 
 	if (len(bc.args) == 0) || bc.args[0] == "random" {
-		filePath, err = attachment.GetRandomCard()
+		filePath, err = attachment.GetCard(attachment.RandomCardGatherer)
 	} else {
-		filePath, err = attachment.GetRandomCard() // attachment.GetCardByName(bc.args[0])
+		filePath, err = attachment.GetCardByName(bc.args[0])
 	}
 
 	if err != nil {
