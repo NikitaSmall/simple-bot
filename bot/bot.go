@@ -38,7 +38,7 @@ func newApiBot(apiToken string) *tgbotapi.BotAPI {
 	return bot
 }
 
-// function creates new update chan for provided bot
+// function creates new update channel for provided bot
 func newUpdatesChan(bot *tgbotapi.BotAPI) <-chan tgbotapi.Update {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60

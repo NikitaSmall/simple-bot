@@ -27,6 +27,9 @@ var conf struct {
 			Time string `envconfig:"default=public/pic"`
 		}
 	}
+	MagicCard struct {
+		Path string `envconfig:"default=public/pic/"`
+	}
 }
 
 // initialized env configs
@@ -45,6 +48,7 @@ func initializeConfig() map[string]string {
 		"quoteSource":             conf.Quote.Source,
 		"weatherApiKey":           conf.Weather.Api.Key,
 		"attachmentAdventureTime": conf.Attachment.Adventure.Time,
+		"magicCardPath":           conf.MagicCard.Path,
 	}
 }
 

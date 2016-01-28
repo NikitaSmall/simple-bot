@@ -55,6 +55,8 @@ func adventureTimeHandler(bc botCommand) tgbotapi.Chattable {
 	return tgbotapi.NewStickerUpload(bc.chatID, msg)
 }
 
+// function handles request to get random or named magic card
+// or error that no such card in online database.
 func magicCardHandler(bc botCommand) tgbotapi.Chattable {
 	var filePath string
 	var err error
@@ -65,7 +67,7 @@ func magicCardHandler(bc botCommand) tgbotapi.Chattable {
 	}
 
 	if (len(bc.args) == 0) || bc.args[0] == "random" {
-		filePath, err = attachment.GetCard(attachment.RandomCardGatherer)
+		filePath, err = attachment.GetRandomCard()
 	} else {
 		filePath, err = attachment.GetCardByName(bc.args[0])
 	}
