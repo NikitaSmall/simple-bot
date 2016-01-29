@@ -11,7 +11,7 @@ import (
 
 // simple interface to get some information from page in the internet
 type PageParser interface {
-	GetPageResult() (string, error)
+	getPageResult() (string, error)
 	getPage() (io.Reader, string)
 }
 
@@ -28,7 +28,7 @@ type Quoter struct {
 // function parse a result page (provided by reader) and returns first single
 // string contained in html-query (jQuery-like string).
 // Part of PageParser interface Implementation for Quoter struct.
-func (q Quoter) GetPageResult() (string, error) {
+func (q Quoter) getPageResult() (string, error) {
 	page, err := q.getPage()
 	if err != nil {
 		return "", err

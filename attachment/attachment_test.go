@@ -80,3 +80,44 @@ func TestATAttachmentGetPathWrong(t *testing.T) {
 		t.Errorf("Object was initialized. Path: %s", path)
 	}
 }
+
+func TestRandomMagicCardAttachment(t *testing.T) {
+	config.Env["magicCardPath"] = "test_pics/pic"
+
+	cardNameOne, err := randomCardGatherer.GetAttachmentPath()
+	if err != nil {
+		t.Errorf("Error on card getting, with error: %s", err.Error())
+	}
+
+	if len(cardNameOne) == 0 || !strings.Contains(cardNameOne, config.Env["magicCardPath"]) {
+		t.Errorf("Wrong cardName format: %s", cardNameOne)
+	}
+
+	cardNameTwo, err := GetRandomCard()
+	if err != nil {
+		t.Errorf("Error on card getting, with error: %s", err.Error())
+	}
+
+	if cardNameOne == cardNameTwo {
+		t.Errorf("cards has the same names: %s", cardNameOne)
+	}
+}
+
+func TestDeterminatedMagicCardAttachment(t *testing.T) {
+	config.Env["magicCardPath"] = "test_pics/pic"
+	gatherer := newMagicCardAttachment(newImagerWithCardName("kor castigator"), true)
+
+	imagePath, err := gatherer.GetAttachmentPath()
+	if err != nil {
+		t.Errorf("Error on image getting, with error: %s", err.Error())
+	}
+
+	if len(imagePath) == 0 || !strings.Contains(imagePath, config.Env["magicCardPath"]) {
+		t.Errorf("Wrong cardName format: %s", imagePath)
+	}
+
+	_, err = GetCardByName("kor castigator")
+	if err != nil {
+		t.Errorf("Error on image getting, with error: %s", err.Error())
+	}
+}

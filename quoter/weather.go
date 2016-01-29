@@ -19,5 +19,5 @@ func GetCurrentWeather(city string) (string, error) {
 	w := openWeatherQuoter
 	w.url += city
 
-	return w.GetPageResult()
+	return w.getPageResult()
 }

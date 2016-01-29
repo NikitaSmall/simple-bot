@@ -30,3 +30,17 @@ func TestEnvironmentCustomValues(t *testing.T) {
 		t.Error("Wrong quoteSource env! ", customEnv["quoteSource"])
 	}
 }
+
+func TestRandomName(t *testing.T) {
+	length := 16
+	stringName := RandStringBytes(length)
+
+	if len(stringName) != length {
+		t.Error("RandStringBytes returns string with wrong length!")
+	}
+
+	secondStringName := RandStringBytes(length)
+	if stringName == secondStringName {
+		t.Error("RandStringBytes creates same strings")
+	}
+}

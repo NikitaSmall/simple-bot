@@ -91,6 +91,16 @@ func TestProcessCommandWeatherWrongArgumentNumber(t *testing.T) {
 	}
 }
 
+func TestProcessCommandWeatherWrongCity(t *testing.T) {
+	update := testMessage("/weather nosuchcity")
+	msg := processCommand(update)
+
+	text := msg.(tgbotapi.MessageConfig).Text
+	if text != "Can't get weather for this city." {
+		t.Errorf("wrong command processing with message %s", text)
+	}
+}
+
 func TestProcessCommand(t *testing.T) {
 	update := testMessage("/joke")
 	msg := processCommand(update)
@@ -123,6 +133,56 @@ func TestProcessSticker(t *testing.T) {
 	filePath := msg.(tgbotapi.StickerConfig).File.(string)
 	if !strings.Contains(filePath, "adventure_time") || !strings.Contains(filePath, ".jpg") {
 		t.Error("wrong command processing filePath. ", filePath)
+	}
+}
+
+func TestProcessRandomMagicCard(t *testing.T) {
+	config.Env["magicCardPath"] = "../public/pic/"
+
+	update := testMessage("/m")
+	msg := processCommand(update)
+
+	filePath := msg.(tgbotapi.PhotoConfig).File.(string)
+	if !strings.Contains(filePath, config.Env["magicCardPath"]) || !strings.Contains(filePath, ".jpg") {
+		t.Error("wrong command processing filePath. ", filePath)
+	}
+}
+
+func TestProcessCustomMagicCard(t *testing.T) {
+	config.Env["magicCardPath"] = "../public/pic/"
+
+	update := testMessage("/m \"kor castigator\"")
+	msg := processCommand(update)
+
+	filePath := msg.(tgbotapi.PhotoConfig).File.(string)
+	if !strings.Contains(filePath, config.Env["magicCardPath"]) || !strings.Contains(filePath, ".jpg") {
+		t.Error("wrong command processing filePath. ", filePath)
+	}
+}
+
+func TestProcessWrongMagicCard(t *testing.T) {
+	config.Env["magicCardPath"] = "../public/pic/"
+
+	update := testMessage("/m fidelsnaff")
+	msg := processCommand(update)
+
+	text := msg.(tgbotapi.MessageConfig).Text
+	if len(text) == 0 ||
+		text != "Can't get source of a picture at http://magiccards.info/query?q=fidelsnaff" {
+		t.Errorf("wrong command processing, with message: %s", text)
+	}
+}
+
+func TestProcessWrongArgumentsMagicCard(t *testing.T) {
+	config.Env["magicCardPath"] = "../public/pic/"
+
+	update := testMessage("/m no such random")
+	msg := processCommand(update)
+
+	text := msg.(tgbotapi.MessageConfig).Text
+	if len(text) == 0 ||
+		text != "Wrong arguments number! Should be one or none. Format: '/m random' or '/m \"card name\"'" {
+		t.Errorf("wrong command processing, with message: %s", text)
 	}
 }
 

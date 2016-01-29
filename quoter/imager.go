@@ -34,7 +34,7 @@ func NewImager(url, query, fromEnc string, imageIndex int) Imager {
 // function uploads a picture from provided by imager page and query
 // and returns (opened!) resp.Body that implements ReadCloser interface.
 func (a Imager) UploadPicture() (io.ReadCloser, error) {
-	imageUrl, err := a.GetPageResult()
+	imageUrl, err := a.getPageResult()
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (a Imager) UploadPicture() (io.ReadCloser, error) {
 // function parse a result page (provided by reader) and returns an
 // src of first single element contained in html-query (jQuery-like string) (it should be an image).
 // Part of PageParser interface Implementation for Imager struct.
-func (a Imager) GetPageResult() (string, error) {
+func (a Imager) getPageResult() (string, error) {
 	page, err := a.getPage()
 	if err != nil {
 		return "", err
