@@ -79,3 +79,12 @@ func magicCardHandler(bc botCommand) tgbotapi.Chattable {
 
 	return tgbotapi.NewPhotoUpload(bc.chatID, filePath)
 }
+
+func bibleQuoteHandler(bc botCommand) tgbotapi.Chattable {
+	quote, err := quoter.GetBibleQuote()
+	if err != nil || len(quote) == 0 {
+		return tgbotapi.NewMessage(bc.chatID, "Can't get quote.")
+	}
+
+	return tgbotapi.NewMessage(bc.chatID, quote)
+}

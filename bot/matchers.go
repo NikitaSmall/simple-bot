@@ -22,3 +22,7 @@ func (bc botCommand) isAdventureTimeRequest() bool {
 func (bc botCommand) isMagicCardRequest() bool {
 	return (bc.command == "/magic") || (bc.command == "/m")
 }
+
+func (bc botCommand) isBibleQuoteRequest() bool {
+	return (bc.command == "/bible") || (bc.command == "/b")
+}
